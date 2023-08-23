@@ -1,0 +1,29 @@
+version: '3'
+services:
+  # Data base container:
+  mongodb:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.mongoDB
+    restart: always
+    ports:
+      - 27017:27017
+
+  # Server container
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    depends_on:
+      - mongodb
+    ports:
+      - 3000:3000
+    environment:
+      # TODO: get from env vars
+      - DB_URL=mongodb://user:pass@mongodb:27017
+      - NODE_ENV=production
+    healthcheck:
+      test: curl --connect-timeout 90 --max-time 90 --retry 4 --retry-delay 30 --retry-max-time 90 --retry-connrefused "http://localhost:3000/healthcheck" | sh
+      interval: 5s
+      timeout: 30s
+      retries: 6

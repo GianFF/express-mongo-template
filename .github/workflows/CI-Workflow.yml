@@ -1,0 +1,76 @@
+# Continuous integration workflow:
+# Runs tests and linter on each push to every branch.
+# Also checks API integration tests on Postman.
+
+name: CI Workflow - test & lint
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+
+  test:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.16.0]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm run test-coverage
+
+      - name: Run linter
+        run: npm run lint
+
+  api-integration-tests:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.16.0]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      
+      - name: Start backend
+        run: docker compose up -d --wait --wait-timeout 60 --build
+
+      - name: Check running containers
+        run: |
+          docker ps -a
+          docker volume ls
+
+      - name: Install Postman CLI
+        run: |
+          curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+
+      - name: Login to Postman CLI
+        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+
+      - name: Run API tests
+        run: |
+          postman collection run "${{ secrets.POSTMAN_COLLECTION_ID }}" --integration-id "146216-${{ github.run_id }}"

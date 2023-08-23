@@ -1,0 +1,44 @@
+{
+  "name": "express-mongo-template",
+  "version": "1.0.0",
+  "description": "Backend API template repository using Express and MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "debug": "nodemon --inspect=0.0.0.0:9229 ./src/server.js",
+    "serve": "nodemon ./src/server.js",
+    "start": "node ./src/server.js",
+    "lint": "eslint './src/**/*.js'",
+    "test": "jest --runInBand --detectOpenHandles",
+    "test-coverage": "jest --collect-coverage --passWithNoTests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GianFF/express-mongo-template.git"
+  },
+  "author": "Gian Franco Fioriello",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GianFF/express-mongo-template/issues"
+  },
+  "homepage": "https://github.com/GianFF/express-mongo-template#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongodb": "^5.7.0",
+    "mongoose": "^7.4.1",
+    "nodemon": "^3.0.1",
+    "uuid": "^9.0.0"
+
+  },
+  "devDependencies": {
+    "eslint": "^8.40.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "jest": "^29.5.0",
+    "mongodb-memory-server": "^8.13.0",
+    "supertest": "^6.3.3"
+  }
+}
