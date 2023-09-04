@@ -57,7 +57,7 @@ jobs:
           cache: 'npm'
       
       - name: Start backend
-        run: docker compose up -d --wait --wait-timeout 60 --build
+        run: docker compose --env-file .env-dev up -d --wait --wait-timeout 60 --build
 
       - name: Check running containers
         run: |

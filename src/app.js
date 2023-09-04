@@ -10,10 +10,12 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 app.use(logger(application.loggerFactory));
+
+app.use((req, _, next) => {
+  req.logger.log(`${req.method} ${req.originalUrl}`);
+  next();
+});
 
 app.get('/healthcheck', (_, res) => res.status(200).send({ message: 'Server healthy' }));
 app.use('/v1', initV1(application));

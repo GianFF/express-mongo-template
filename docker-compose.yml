@@ -6,8 +6,13 @@ services:
       context: .
       dockerfile: ./Dockerfile.mongoDB
     restart: always
+    environment:
+      - MONGO_INITDB_ROOT_DATABASE=${DATABASE}
+      - MONGO_INITDB_ROOT_USERNAME=${USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${PASSWORD}
+      - DB_PORT=${DB_PORT}
     ports:
-      - 27017:27017
+      - ${DB_PORT}:${DB_PORT}
 
   # Server container
   app:
@@ -16,12 +21,12 @@ services:
       dockerfile: ./Dockerfile
     depends_on:
       - mongodb
-    ports:
-      - 3000:3000
     environment:
-      # TODO: get from env vars
-      - DB_URL=mongodb://user:pass@mongodb:27017
-      - NODE_ENV=production
+      - NODE_ENV=${NODE_ENV}
+      - DB_URL=${DB_URL}
+      - PORT=${PORT}
+    ports:
+      - ${PORT}:${PORT}
     healthcheck:
       test: curl --connect-timeout 90 --max-time 90 --retry 4 --retry-delay 30 --retry-max-time 90 --retry-connrefused "http://localhost:3000/healthcheck" | sh
       interval: 5s

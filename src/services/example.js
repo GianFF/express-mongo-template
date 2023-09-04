@@ -7,7 +7,6 @@ const example = async ({
   logger.log(`Example service - example method - email: ${email}`);
 
   const existingAccount = await exampleRepository.findByEmail({ email });
-
   if (existingAccount) {
     throw new HTTPError('Email already taken', 409);
   }

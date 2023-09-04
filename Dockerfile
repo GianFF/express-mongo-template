@@ -4,8 +4,6 @@ WORKDIR /example
 
 COPY . .
 
-COPY .env-example .env
-
-RUN npm ci --production
+RUN npm ci --omit=dev
 
 CMD [ "npm", "run", "start" ]

@@ -4,7 +4,7 @@
     - [What's this about?](#whats-this-about)
   - [Project setup](#project-setup)
     - [Local Setup](#local-setup)
-    - [Docker Setup](#docker-setup)
+    - [App setup with Docker](#app-setup-with-docker)
   - [Architectural Decisions](#architectural-decisions)
   - [Testing](#testing)
 
@@ -26,16 +26,13 @@ It also uses GitHub Actions for the CI/CD workflows.
 
 ### Local Setup
 
-You can startup the DB using a Docker image as follows:
-* `docker build -f Dockerfile.mongoDB . -t exampleDB`
-* `docker run --publish 27017:27017 exampleDB`  
+- `docker compose -f docker-compose.debug.yml --env-file .env-test up -d --wait --wait-timeout 60 --build`
+- click on debug script on `package.json`
 
-And then just start the server:
-* `npm run serve` 
-* or run the debug script so you can add breakpoints in the code.
-
-### Docker Setup
-`docker compose up -d --wait --wait-timeout 60 --build`
+### App setup with Docker
+* TEST: `docker compose --env-file .env-test up -d --wait --wait-timeout 60 --build`
+* DEV: `docker compose --env-file .env-dev up -d --wait --wait-timeout 60 --build` (also used on CI)
+* PROD: `docker compose up -d --wait --wait-timeout 60 --build` (.env file loaded by default)
 
 ## Architectural Decisions
 Github Actions for CI/CD

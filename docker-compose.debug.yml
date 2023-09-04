@@ -1,0 +1,15 @@
+version: '3'
+services:
+  # Data base container:
+  mongodb:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.mongoDB
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_DATABASE=${DATABASE}
+      - MONGO_INITDB_ROOT_USERNAME=${USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${PASSWORD}
+      - DB_PORT=${DB_PORT}
+    ports:
+      - ${DB_PORT}:${DB_PORT}
